@@ -16,7 +16,10 @@ def farmer(db):
 @pytest.fixture
 def admin_user(db):
     from apps.users.models import User
-    return User.objects.create_user(email='admin@test.com', password='pass1234', role='admin')
+    return User.objects.create_user(
+        email='admin@test.com', password='pass1234', role='admin',
+        is_staff=True, is_superuser=True
+    )
 
 
 @pytest.fixture
