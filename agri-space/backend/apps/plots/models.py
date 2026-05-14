@@ -32,6 +32,8 @@ class Plot(models.Model):
         if self.geometry and self.geometry.geom_type == 'Polygon':
             projected = self.geometry.transform(3857, clone=True)
             self.area_hectares = projected.area / 10000
+        else:
+            self.area_hectares = None
         super().save(*args, **kwargs)
 
 
@@ -49,8 +51,7 @@ class WeatherCache(models.Model):
     def save(self, *args, **kwargs):
         self.latitude = round(self.latitude, 2)
         self.longitude = round(self.longitude, 2)
-        if not self.expires_at:
-            self.expires_at = timezone.now() + timedelta(hours=1)
+        self.expires_at = timezone.now() + timedelta(hours=1)
         super().save(*args, **kwargs)
 
 

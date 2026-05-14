@@ -32,7 +32,6 @@ def test_plot_with_polygon_computes_area(farmer):
 @pytest.mark.django_db
 def test_weather_cache_rounds_coordinates():
     from apps.plots.models import WeatherCache
-    from django.utils import timezone
     cache = WeatherCache.objects.create(
         latitude=28.12345, longitude=-26.67890, forecast_json={}
     )
@@ -51,3 +50,16 @@ def test_weather_cache_sets_expires_at():
     after = timezone.now()
     assert cache.expires_at is not None
     assert before < cache.expires_at < after + timezone.timedelta(hours=1, seconds=5)
+
+
+@pytest.mark.django_db
+def test_plot_geometry_change_to_point_clears_area(farmer):
+    from apps.plots.models import Plot
+    from django.contrib.gis.geos import Point, Polygon
+    poly = Polygon(((28.0, -26.0), (28.005, -26.0), (28.005, -26.005),
+                    (28.0, -26.005), (28.0, -26.0)))
+    plot = Plot.objects.create(owner=farmer, name='Change Field', geometry=poly)
+    assert plot.area_hectares is not None
+    plot.geometry = Point(28.0, -26.0)
+    plot.save()
+    assert plot.area_hectares is None
