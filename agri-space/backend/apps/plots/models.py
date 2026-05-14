@@ -1,6 +1,8 @@
 import uuid
+from datetime import timedelta
 from django.contrib.gis.db import models as gis_models
 from django.db import models
+from django.utils import timezone
 
 
 class CropTag(models.Model):
@@ -38,11 +40,18 @@ class WeatherCache(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     fetched_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
+    expires_at = models.DateTimeField(editable=False)
     forecast_json = models.JSONField()
 
     class Meta:
         unique_together = ['latitude', 'longitude']
+
+    def save(self, *args, **kwargs):
+        self.latitude = round(self.latitude, 2)
+        self.longitude = round(self.longitude, 2)
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(hours=1)
+        super().save(*args, **kwargs)
 
 
 class AnalyticsSnapshot(models.Model):

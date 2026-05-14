@@ -27,3 +27,27 @@ def test_plot_with_polygon_computes_area(farmer):
     plot = Plot.objects.create(owner=farmer, name='Poly Field', geometry=poly)
     assert plot.area_hectares is not None
     assert plot.area_hectares > 0
+
+
+@pytest.mark.django_db
+def test_weather_cache_rounds_coordinates():
+    from apps.plots.models import WeatherCache
+    from django.utils import timezone
+    cache = WeatherCache.objects.create(
+        latitude=28.12345, longitude=-26.67890, forecast_json={}
+    )
+    assert cache.latitude == 28.12
+    assert cache.longitude == -26.68
+
+
+@pytest.mark.django_db
+def test_weather_cache_sets_expires_at():
+    from apps.plots.models import WeatherCache
+    from django.utils import timezone
+    before = timezone.now()
+    cache = WeatherCache.objects.create(
+        latitude=28.0, longitude=-26.0, forecast_json={}
+    )
+    after = timezone.now()
+    assert cache.expires_at is not None
+    assert before < cache.expires_at < after + timezone.timedelta(hours=1, seconds=5)
