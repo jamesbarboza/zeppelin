@@ -1,9 +1,21 @@
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import generics, permissions, viewsets
+
+from .models import CropTag, Plot
+from .serializers import CropTagSerializer, PlotSerializer
 
 
-class PlotListView(APIView):
-    """Stub view — full implementation in Backend Task 4."""
+class PlotViewSet(viewsets.ModelViewSet):
+    serializer_class = PlotSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
-    def get(self, request):
-        return Response([])
+    def get_queryset(self):
+        return Plot.objects.filter(owner=self.request.user).prefetch_related('crop_tags')
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class CropTagListView(generics.ListAPIView):
+    serializer_class = CropTagSerializer
+    queryset = CropTag.objects.all().order_by('name')
