@@ -6,7 +6,7 @@ DAILY_VARIABLES = [
     'precipitation_sum',
     'wind_speed_10m_max',
     'relative_humidity_2m_max',
-    'soil_moisture_0_to_1cm',
+    'precipitation_probability_max',
     'temperature_2m_min',
     'temperature_2m_max',
     'et0_fao_evapotranspiration',

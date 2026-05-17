@@ -7,7 +7,7 @@ MOCK_FORECAST = {
         'precipitation_sum': [0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0],
         'wind_speed_10m_max': [12.0, 15.0, 10.0, 8.0, 9.0, 11.0, 13.0],
         'relative_humidity_2m_max': [55.0, 60.0, 75.0, 50.0, 52.0, 58.0, 61.0],
-        'soil_moisture_0_to_1cm': [0.2, 0.2, 0.3, 0.3, 0.25, 0.22, 0.2],
+        'precipitation_probability_max': [10, 20, 80, 30, 15, 10, 25],
         'temperature_2m_min': [18.0, 17.0, 15.0, 16.0, 17.0, 18.0, 19.0],
         'temperature_2m_max': [28.0, 27.0, 22.0, 25.0, 26.0, 27.0, 28.0],
         'et0_fao_evapotranspiration': [4.5, 4.2, 3.0, 3.8, 4.0, 4.3, 4.5],
