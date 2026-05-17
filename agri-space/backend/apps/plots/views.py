@@ -18,4 +18,5 @@ class PlotViewSet(viewsets.ModelViewSet):
 
 class CropTagListView(generics.ListAPIView):
     serializer_class = CropTagSerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = CropTag.objects.all().order_by('name')

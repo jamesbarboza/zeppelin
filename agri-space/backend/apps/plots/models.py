@@ -30,8 +30,8 @@ class Plot(models.Model):
 
     def save(self, *args, **kwargs):
         if self.geometry and self.geometry.geom_type == 'Polygon':
-            projected = self.geometry.transform(3857, clone=True)
-            self.area_hectares = projected.area / 10000
+            projected = self.geometry.transform(6933, clone=True)
+            self.area_hectares = projected.area / 10_000
         else:
             self.area_hectares = None
         super().save(*args, **kwargs)
